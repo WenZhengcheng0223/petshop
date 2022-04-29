@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.petshop.mapper.CategoryMapper">
+
+    <resultMap type="com.ruoyi.petshop.domain.vo.CategoryVo" id="CategoryResult">
+        <result property="catId" column="cat_id"/>
+        <result property="catName" column="cat_name"/>
+        <result property="catPid" column="cat_pid"/>
+        <result property="catLevel" column="cat_level"/>
+        <result property="catDeleted" column="cat_deleted"/>
+        <result property="catIcon" column="cat_icon"/>
+        <result property="catSrc" column="cat_src"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="categoryOssVo" javaType="com.ruoyi.petshop.domain.vo.CategoryOssVo">
+            <result property="ossId" column="oss_id"/>
+            <result property="catId" column="cat_id"/>
+            <result property="url" column="img_url"/>
+        </association>
+    </resultMap>
+
+
+    <select id="queryList" resultMap="CategoryResult">
+        select
+                sc.cat_id, sc.cat_name, sc.cat_pid, sc.cat_level,
+                sc.cat_deleted, sc.create_by, sc.create_time, sc.update_by, sc.update_time,
+                sco.oss_id,sco.cat_id, sco.img_url
+        from sp_category sc left join sp_category_oss sco
+        on sc.cat_id = sco.cat_id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

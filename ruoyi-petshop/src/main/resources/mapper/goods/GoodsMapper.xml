@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.petshop.mapper.GoodsMapper">
+
+    <resultMap type="com.ruoyi.petshop.domain.vo.GoodsVo" id="GoodsResult">
+        <result property="goodsId" column="goods_id"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="goodsPrice" column="goods_price"/>
+        <result property="goodsNumber" column="goods_number"/>
+        <result property="goodsWeight" column="goods_weight"/>
+        <result property="catId" column="cat_id"/>
+        <result property="goodsIntroduce" column="goods_introduce"/>
+        <result property="isDel" column="is_del"/>
+        <result property="catOneId" column="cat_one_id"/>
+        <result property="catTwoId" column="cat_two_id"/>
+        <result property="catThreeId" column="cat_three_id"/>
+        <result property="hotMumber" column="hot_mumber"/>
+        <result property="isPromote" column="is_promote"/>
+        <result property="goodsState" column="goods_state"/>
+        <collection property="goodsOss" ofType="com.ruoyi.petshop.domain.vo.GoodsOssVo">
+            <result property="ossId" column="oss_id"/>
+            <result property="goodsId" column="goods_id"/>
+            <result property="url" column="img_url"/>
+        </collection>
+    </resultMap>
+
+    <sql id="pageSelect">
+
+    </sql>
+
+    <select id="queryPageListOss" resultMap="GoodsResult">
+        select sd.*, so.*
+        from (select * from sp_goods ${ew.customSqlSegment} limit #{start},#{size})as sd
+        left join sp_goods_oss as so
+        on sd.goods_id = so.goods_id
+        order by sd.goods_id
+    </select>
+
+
+</mapper>
