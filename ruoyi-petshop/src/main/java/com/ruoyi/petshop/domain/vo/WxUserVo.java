@@ -1,5 +1,7 @@
 package com.ruoyi.petshop.domain.vo;
 
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.ruoyi.common.annotation.ExcelDictFormat;
@@ -15,7 +17,7 @@ import java.util.Date;
  * 会员视图对象 sp_user
  *
  * @author liurui
- * @date 2022-04-26
+ * @date 2022-04-30
  */
 @Data
 @ApiModel("会员视图对象")
@@ -39,10 +41,10 @@ public class WxUserVo {
     private String openid;
 
     /**
-     * 登录名
+     * 微信名称
      */
-    @ExcelProperty(value = "登录名")
-    @ApiModelProperty("登录名")
+    @ExcelProperty(value = "微信名称")
+    @ApiModelProperty("微信名称")
     private String nickName;
 
     /**
@@ -51,13 +53,6 @@ public class WxUserVo {
     @ExcelProperty(value = "头像地址")
     @ApiModelProperty("头像地址")
     private String avatarUrl;
-
-    /**
-     * 登录密码
-     */
-    @ExcelProperty(value = "登录密码")
-    @ApiModelProperty("登录密码")
-    private String password;
 
     /**
      * 性别
@@ -82,39 +77,26 @@ public class WxUserVo {
     private String userHobby;
 
     /**
-     * 简介
+     * 帐号状态
      */
-    @ExcelProperty(value = "简介")
-    @ApiModelProperty("简介")
-    private String userIntroduce;
+    @ExcelProperty(value = "帐号状态", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(dictType = "user_status")
+    @ApiModelProperty("帐号状态")
+    private Integer status;
 
     /**
-     * 创建者
+     * 最后登录IP
      */
-    @ExcelProperty(value = "创建者")
-    @ApiModelProperty("创建者")
-    private String createBy;
+    @ExcelProperty(value = "最后登录IP")
+    @ApiModelProperty("最后登录IP")
+    private String loginIp;
 
     /**
-     * 创建时间
+     * 最后登录时间
      */
-    @ExcelProperty(value = "创建时间")
-    @ApiModelProperty("创建时间")
-    private Date createTime;
-
-    /**
-     * 更新者
-     */
-    @ExcelProperty(value = "更新者")
-    @ApiModelProperty("更新者")
-    private String updateBy;
-
-    /**
-     * 修改时间
-     */
-    @ExcelProperty(value = "修改时间")
-    @ApiModelProperty("修改时间")
-    private Date updateTime;
+    @ExcelProperty(value = "最后登录时间")
+    @ApiModelProperty("最后登录时间")
+    private Date loginDate;
 
 
 }

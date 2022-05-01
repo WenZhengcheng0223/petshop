@@ -13,7 +13,7 @@ import java.util.List;
  * 会员Service接口
  *
  * @author liurui
- * @date 2022-04-26
+ * @date 2022-04-30
  */
 public interface IWxUserService {
 
@@ -25,10 +25,18 @@ public interface IWxUserService {
      */
     WxUserVo queryById(Long userId);
 
+
+    /**
+     * 查询会员
+     *
+     * @param openId 微信openid
+     * @return 会员
+     */
+    WxUser queryByOpenId(String openId);
     /**
      * 查询会员列表
      *
-     * @param wxUser 会员
+     * @param bo 会员
      * @return 会员集合
      */
     TableDataInfo<WxUserVo> queryPageList(WxUserBo bo, PageQuery pageQuery);
@@ -36,7 +44,7 @@ public interface IWxUserService {
     /**
      * 查询会员列表
      *
-     * @param wxUser 会员
+     * @param bo 会员
      * @return 会员集合
      */
     List<WxUserVo> queryList(WxUserBo bo);
@@ -44,7 +52,7 @@ public interface IWxUserService {
     /**
      * 修改会员
      *
-     * @param wxUser 会员
+     * @param bo 会员
      * @return 结果
      */
     Boolean insertByBo(WxUserBo bo);
@@ -55,7 +63,7 @@ public interface IWxUserService {
      * @param wxUser 会员
      * @return 结果
      */
-    Boolean updateByBo(WxUserBo bo);
+    Boolean updateByBo(WxUser wxUser);
 
     /**
      * 校验并批量删除会员信息
@@ -64,5 +72,5 @@ public interface IWxUserService {
      * @param isValid 是否校验,true-删除前校验,false-不校验
      * @return 结果
      */
-    Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+    Boolean deleteWithValidByIds(Collection<Long> userIds, Boolean isValid);
 }

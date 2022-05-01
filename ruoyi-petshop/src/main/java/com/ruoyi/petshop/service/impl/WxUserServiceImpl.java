@@ -23,7 +23,7 @@ import java.util.Collection;
  * 会员Service业务层处理
  *
  * @author liurui
- * @date 2022-04-26
+ * @date 2022-04-30
  */
 @RequiredArgsConstructor
 @Service
@@ -40,6 +40,19 @@ public class WxUserServiceImpl implements IWxUserService {
     @Override
     public WxUserVo queryById(Long userId){
         return baseMapper.selectVoById(userId);
+    }
+
+    /**
+     * 查询会员
+     *
+     * @param openId 微信openid
+     * @return 会员
+     */
+    @Override
+    public WxUser queryByOpenId(String openId) {
+        LambdaQueryWrapper<WxUser> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(WxUser::getOpenid, openId);
+        return baseMapper.selectOne(lqw);
     }
 
     /**
@@ -73,9 +86,10 @@ public class WxUserServiceImpl implements IWxUserService {
         lqw.like(StringUtils.isNotBlank(bo.getNickName()), WxUser::getNickName, bo.getNickName());
         lqw.eq(StringUtils.isNotBlank(bo.getUserSex()), WxUser::getUserSex, bo.getUserSex());
         lqw.eq(StringUtils.isNotBlank(bo.getUserTel()), WxUser::getUserTel, bo.getUserTel());
+        lqw.eq(bo.getStatus() != null, WxUser::getStatus, bo.getStatus());
+        lqw.eq(bo.getLoginDate() != null, WxUser::getLoginDate, bo.getLoginDate());
         return lqw;
     }
-
     /**
      * 新增会员
      *
@@ -96,14 +110,13 @@ public class WxUserServiceImpl implements IWxUserService {
     /**
      * 修改会员
      *
-     * @param bo 会员
+     * @param wxUser 会员
      * @return 结果
      */
     @Override
-    public Boolean updateByBo(WxUserBo bo) {
-        WxUser update = BeanUtil.toBean(bo, WxUser.class);
-        validEntityBeforeSave(update);
-        return baseMapper.updateById(update) > 0;
+    public Boolean updateByBo(WxUser wxUser) {
+        validEntityBeforeSave(wxUser);
+        return baseMapper.updateById(wxUser) > 0;
     }
 
     /**
@@ -122,10 +135,10 @@ public class WxUserServiceImpl implements IWxUserService {
      * @return 结果
      */
     @Override
-    public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
+    public Boolean deleteWithValidByIds(Collection<Long> userIds, Boolean isValid) {
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
         }
-        return baseMapper.deleteBatchIds(ids) > 0;
+        return baseMapper.deleteBatchIds(userIds) > 0;
     }
 }

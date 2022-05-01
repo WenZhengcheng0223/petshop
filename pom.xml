@@ -436,7 +436,8 @@
             <properties>
                 <profiles.active>prod</profiles.active>
                 <logging.level>warn</logging.level>
-                <knife4j.production>true</knife4j.production>
+                <!-- 是否开启保护策略-->
+                <knife4j.production>false</knife4j.production>
                 <endpoints.include>health, info, logfile</endpoints.include>
             </properties>
         </profile>

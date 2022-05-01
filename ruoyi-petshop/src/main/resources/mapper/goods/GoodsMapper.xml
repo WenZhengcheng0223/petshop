@@ -32,7 +32,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="queryPageListOss" resultMap="GoodsResult">
         select sd.*, so.*
-        from (select * from sp_goods ${ew.customSqlSegment} limit #{start},#{size})as sd
+        from (
+            select * from sp_goods ${ew.customSqlSegment}
+            <if test="start != null &amp;&amp; size != null">
+                limit #{start},#{size}
+            </if>
+        )
+        as sd
         left join sp_goods_oss as so
         on sd.goods_id = so.goods_id
         order by sd.goods_id

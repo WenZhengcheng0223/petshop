@@ -3,20 +3,18 @@ package com.ruoyi.petshop.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.common.core.domain.PageQuery;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.petshop.domain.Goods;
-import com.ruoyi.petshop.domain.GoodsOss;
 import com.ruoyi.petshop.domain.bo.GoodsBo;
 import com.ruoyi.petshop.domain.vo.GoodsVo;
 import com.ruoyi.petshop.mapper.GoodsMapper;
 import com.ruoyi.petshop.service.IGoodsService;
-import com.ruoyi.system.domain.SysOss;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -56,10 +54,16 @@ public class GoodsServiceImpl implements IGoodsService {
         LambdaQueryWrapper<Goods> lqw = buildQueryWrapper(bo);
         Integer pageNum = pageQuery.getPageNum();
         Integer pageSize = pageQuery.getPageSize();
+        List<GoodsVo> result = new ArrayList<>();
         Long totle = baseMapper.selectCount(lqw);
-        Integer start = (pageNum - 1) * pageSize;
-        List<GoodsVo> result = baseMapper.queryPageListOss(lqw,start,pageSize);
-        return TableDataInfo.build(result,totle);
+        Integer start = null;
+        if(pageNum!=null && pageSize!=null){
+            start = (pageNum - 1) * pageSize;
+        }
+        result = baseMapper.queryPageListOss(lqw, start, pageSize);
+        return TableDataInfo.build(result, totle);
+
+
     }
 
     /**
@@ -91,14 +95,17 @@ public class GoodsServiceImpl implements IGoodsService {
      * @return 结果
      */
     @Override
-    public Boolean insertByBo(GoodsBo bo) {
+    public Object insertByBo(GoodsBo bo) {
         Goods add = BeanUtil.toBean(bo, Goods.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setGoodsId(add.getGoodsId());
+            return bo;
         }
-        return flag;
+
+        return false;
+
     }
 
     /**

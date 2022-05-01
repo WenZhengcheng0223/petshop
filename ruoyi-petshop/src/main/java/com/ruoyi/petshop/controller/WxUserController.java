@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.ruoyi.petshop.domain.WxUser;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.*;
@@ -32,7 +34,7 @@ import io.swagger.annotations.ApiOperation;
  * 会员Controller
  *
  * @author liurui
- * @date 2022-04-26
+ * @date 2022-04-30
  */
 @Validated
 @Api(value = "会员控制器", tags = {"会员管理"})
@@ -98,7 +100,7 @@ public class WxUserController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody WxUserBo bo) {
-        return toAjax(iWxUserService.updateByBo(bo) ? 1 : 0);
+        return toAjax(iWxUserService.updateByBo(BeanUtil.toBean(bo, WxUser.class)) ? 1 : 0);
     }
 
     /**

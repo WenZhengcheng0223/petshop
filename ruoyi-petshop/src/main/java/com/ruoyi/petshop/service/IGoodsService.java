@@ -1,6 +1,5 @@
 package com.ruoyi.petshop.service;
 
-import com.ruoyi.petshop.domain.Goods;
 import com.ruoyi.petshop.domain.vo.GoodsVo;
 import com.ruoyi.petshop.domain.bo.GoodsBo;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -47,7 +46,7 @@ public interface IGoodsService {
      * @param goods 商品
      * @return 结果
      */
-    Boolean insertByBo(GoodsBo bo);
+    Object insertByBo(GoodsBo bo);
 
     /**
      * 修改商品

@@ -7,13 +7,15 @@ import java.io.Serializable;
 import java.util.Date;
 import java.math.BigDecimal;
 
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 会员对象 sp_user
  *
  * @author liurui
- * @date 2022-04-26
+ * @date 2022-04-30
  */
 @Data
 @TableName("sp_user")
@@ -31,17 +33,13 @@ public class WxUser extends BaseEntity {
      */
     private String openid;
     /**
-     * 登录名
+     * 微信名称
      */
     private String nickName;
     /**
      * 头像地址
      */
     private String avatarUrl;
-    /**
-     * 登录密码
-     */
-    private String password;
     /**
      * 性别
      */
@@ -55,8 +53,16 @@ public class WxUser extends BaseEntity {
      */
     private String userHobby;
     /**
-     * 简介
+     * 帐号状态
      */
-    private String userIntroduce;
+    private Integer status;
+    /**
+     * 最后登录IP
+     */
+    private String loginIp;
+    /**
+     * 最后登录时间
+     */
+    private Date loginDate;
 
 }

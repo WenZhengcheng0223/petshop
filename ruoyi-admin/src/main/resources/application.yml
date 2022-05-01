@@ -141,6 +141,8 @@ security:
     # actuator 监控配置
     - /actuator
     - /actuator/**
+    # 微信小程序
+    - /api/wx/**
 
 # MyBatisPlus配置
 # https://baomidou.com/config/
@@ -191,7 +193,7 @@ swagger:
   # 是否开启swagger
   enabled: true
   # 请求前缀
-  pathMapping: /dev-api
+  pathMapping: /
   # 标题
   title: '标题：${ruoyi.name}后台管理系统_接口文档'
   # 描述
