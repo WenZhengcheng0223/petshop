@@ -1,23 +1,23 @@
 package com.ruoyi.petshop.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.common.core.page.TableDataInfo;
-import com.ruoyi.common.core.domain.PageQuery;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ruoyi.common.core.domain.PageQuery;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.petshop.domain.Order;
 import com.ruoyi.petshop.domain.bo.OrderBo;
 import com.ruoyi.petshop.domain.vo.OrderVo;
-import com.ruoyi.petshop.domain.Order;
 import com.ruoyi.petshop.mapper.OrderMapper;
 import com.ruoyi.petshop.service.IOrderService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
 /**
  * 订单Service业务层处理
@@ -38,7 +38,7 @@ public class OrderServiceImpl implements IOrderService {
      * @return 订单
      */
     @Override
-    public OrderVo queryById(String orderId){
+    public OrderVo queryById(String orderId) {
         return baseMapper.selectVoById(orderId);
     }
 
@@ -67,6 +67,22 @@ public class OrderServiceImpl implements IOrderService {
         return baseMapper.selectVoList(lqw);
     }
 
+    /**
+     * 新增订单
+     *
+     * @param bo 订单
+     * @return 结果
+     */
+    @Override
+    public boolean insertByBo(OrderBo bo) {
+        Order order = BeanUtil.toBean(bo, Order.class);
+        boolean flag = baseMapper.insert(order) > 0;
+        if (flag){
+            bo.setOrderId(order.getOrderId());
+        }
+        return flag;
+    }
+
     private LambdaQueryWrapper<Order> buildQueryWrapper(OrderBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<Order> lqw = Wrappers.lambdaQuery();
@@ -79,21 +95,11 @@ public class OrderServiceImpl implements IOrderService {
         return lqw;
     }
 
-    /**
-     * 新增订单
-     *
-     * @param bo 订单
-     * @return 结果
-     */
-    @Override
-    public Boolean insertByBo(OrderBo bo) {
-        Order add = BeanUtil.toBean(bo, Order.class);
-        validEntityBeforeSave(add);
-        boolean flag = baseMapper.insert(add) > 0;
-        if (flag) {
-            bo.setOrderId(add.getOrderId());
-        }
-        return flag;
+    private LambdaQueryWrapper<Order> buildUpdateWrapper(OrderBo bo) {
+        Map<String, Object> params = bo.getParams();
+        LambdaQueryWrapper<Order> lqw = Wrappers.lambdaQuery();
+        lqw.eq(StringUtils.isNotBlank(bo.getOrderNumber()), Order::getOrderNumber, bo.getOrderNumber());
+        return lqw;
     }
 
     /**
@@ -103,10 +109,23 @@ public class OrderServiceImpl implements IOrderService {
      * @return 结果
      */
     @Override
-    public Boolean updateByBo(OrderBo bo) {
+    public Boolean updateById(OrderBo bo) {
         Order update = BeanUtil.toBean(bo, Order.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 修改订单
+     *
+     * @param bo 订单
+     * @return
+     */
+    @Override
+    public boolean updateByOrderNum(OrderBo bo) {
+        Order update = BeanUtil.toBean(bo, Order.class);
+        LambdaQueryWrapper<Order> lqw = buildUpdateWrapper(bo);
+        return baseMapper.update(update, lqw) > 0;
     }
 
     /**
@@ -114,19 +133,19 @@ public class OrderServiceImpl implements IOrderService {
      *
      * @param entity 实体类数据
      */
-    private void validEntityBeforeSave(Order entity){
+    private void validEntityBeforeSave(Order entity) {
         //TODO 做一些数据校验,如唯一约束
     }
 
     /**
      * 批量删除订单
      *
-     * @param orderIds 需要删除的订单主键
+     * @param ids 需要删除的订单主键
      * @return 结果
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<String> ids, Boolean isValid) {
-        if(isValid){
+        if (isValid) {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;

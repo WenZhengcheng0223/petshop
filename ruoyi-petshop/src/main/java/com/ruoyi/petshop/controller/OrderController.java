@@ -98,7 +98,7 @@ public class OrderController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody OrderBo bo) {
-        return toAjax(iOrderService.updateByBo(bo) ? 1 : 0);
+        return toAjax(iOrderService.updateById(bo) ? 1 : 0);
     }
 
     /**

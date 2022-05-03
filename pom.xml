@@ -323,13 +323,13 @@
             <dependency>
                 <groupId>com.ruoyi</groupId>
                 <artifactId>ruoyi-petshop</artifactId>
-                <version>${ruoyi-vue-plus.version}</version>
+                <version>1.0.0</version>
             </dependency>
 
             <dependency>
                 <groupId>com.ruoyi</groupId>
                 <artifactId>ruoyi-petshop-wxminiapp</artifactId>
-                <version>${ruoyi-vue-plus.version}</version>
+                <version>1.0.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

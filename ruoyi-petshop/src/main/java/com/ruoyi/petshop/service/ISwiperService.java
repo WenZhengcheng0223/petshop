@@ -42,6 +42,8 @@ public interface ISwiperService {
      */
     List<SwiperVo> queryList(SwiperBo bo);
 
+    List<SwiperVo> queryUsableList();
+
     /**
      * 修改轮播图
      *

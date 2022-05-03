@@ -1,6 +1,7 @@
 package com.ruoyi.petshop.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -38,6 +39,7 @@ public class SwiperServiceImpl implements ISwiperService {
 
     private final SwiperMapper baseMapper;
 
+    private static final String USABLE_STATUS = "1";
     /**
      * 查询轮播图
      *
@@ -71,6 +73,19 @@ public class SwiperServiceImpl implements ISwiperService {
     @Override
     public List<SwiperVo> queryList(SwiperBo bo) {
         LambdaQueryWrapper<Swiper> lqw = buildQueryWrapper(bo);
+        return baseMapper.selectVoList(lqw);
+    }
+
+    /**
+     * 查询可用轮播图列表
+     *
+     *
+     * @return 轮播图
+     */
+    @Override
+    public List<SwiperVo> queryUsableList() {
+        LambdaQueryWrapper<Swiper> lqw = Wrappers.lambdaQuery();
+        lqw.eq(Swiper::getStatus,USABLE_STATUS);
         return baseMapper.selectVoList(lqw);
     }
 

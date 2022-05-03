@@ -49,13 +49,9 @@ public interface IWxUserService {
      */
     List<WxUserVo> queryList(WxUserBo bo);
 
-    /**
-     * 修改会员
-     *
-     * @param bo 会员
-     * @return 结果
-     */
-    Boolean insertByBo(WxUserBo bo);
+    abstract Boolean insertByBo(WxUserBo bo);
+
+    WxUser insertByOpenId(WxUserBo bo);
 
     /**
      * 修改会员

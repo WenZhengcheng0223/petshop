@@ -141,8 +141,12 @@ security:
     # actuator 监控配置
     - /actuator
     - /actuator/**
-    # 微信小程序
-    - /api/wx/**
+    # 微信小程序登录退出
+    - /api/wx/login
+    # 微信小程序通用请求 不需要验证
+    - /api/wx/common/*
+    # 微信小程序支付回调 不需要验证
+    - /api/wx/pay/notify/**
 
 # MyBatisPlus配置
 # https://baomidou.com/config/
@@ -197,14 +201,14 @@ swagger:
   # 标题
   title: '标题：${ruoyi.name}后台管理系统_接口文档'
   # 描述
-  description: '描述：用于管理集团旗下公司的人员信息,具体包括XXX,XXX模块...'
+  description: '描述：用于宠物日用品商店的前台和微信小程序相关接口管理...'
   # 版本
   version: '版本号: ${ruoyi-vue-plus.version}'
   # 作者信息
   contact:
     name: Sharry
-    email: crazylionli@163.com
-    url: https://gitee.com/JavaLionLi/RuoYi-Vue-Plus
+    email: 1070461265@qq.com
+    url:
   groups:
     - name: 5.演示案例
       basePackage: com.ruoyi.demo
@@ -284,3 +288,11 @@ wx:
       - appid: wx1d73696716e9918c #微信小程序的appid
         secret: bece47e5168e2243e9e1b5ddf4501d0a #微信小程序的Secret
         msgDataFormat: JSON
+  pay:
+    appId: wx1d73696716e9918c #微信公众号或者小程序等的appid
+    mchId: 1623059334 #微信支付商户号
+    mchKey: zumanongwangluogongzuoshi8691411 #微信支付商户密钥
+    apiV3Key: zumanongwangluogongzuoshi8691411
+    privateKeyPath: classpath:/apiclient_key.pem # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
+    privateCertPath: classpath:/apiclient_cert.pem # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
+    notifyUrl: http://qqz710999c1.ngrok.wendal.cn/api/wx/pay/notify/order

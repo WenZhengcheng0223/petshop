@@ -1,6 +1,5 @@
 package com.ruoyi.petshop.service;
 
-import com.ruoyi.petshop.domain.Order;
 import com.ruoyi.petshop.domain.vo.OrderVo;
 import com.ruoyi.petshop.domain.bo.OrderBo;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -42,20 +41,29 @@ public interface IOrderService {
     List<OrderVo> queryList(OrderBo bo);
 
     /**
-     * 修改订单
+     * 新增订单
      *
      * @param bo 订单
      * @return 结果
      */
-    Boolean insertByBo(OrderBo bo);
 
+    boolean insertByBo(OrderBo bo);
     /**
      * 修改订单
      *
      * @param bo 订单
      * @return 结果
      */
-    Boolean updateByBo(OrderBo bo);
+    Boolean updateById(OrderBo bo);
+
+
+    /**
+     * 修改订单
+     *
+     * @param bo 订单
+     * @return
+     */
+    boolean updateByOrderNum(OrderBo bo);
 
     /**
      * 校验并批量删除订单信息
@@ -65,4 +73,5 @@ public interface IOrderService {
      * @return 结果
      */
     Boolean deleteWithValidByIds(Collection<String> ids, Boolean isValid);
+
 }

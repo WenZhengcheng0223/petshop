@@ -108,6 +108,24 @@ public class WxUserServiceImpl implements IWxUserService {
     }
 
     /**
+     * 微信小程序首次登陆新增会员
+     *
+     * @param bo 会员
+     * @return 结果
+     */
+    @Override
+    public WxUser insertByOpenId(WxUserBo bo) {
+        WxUser add = BeanUtil.toBean(bo, WxUser.class);
+        validEntityBeforeSave(add);
+        boolean flag = baseMapper.insert(add) > 0;
+        if (flag) {
+            return add;
+
+        }
+        return null;
+    }
+
+    /**
      * 修改会员
      *
      * @param wxUser 会员

@@ -27,7 +27,7 @@ public class Order extends BaseEntity {
     /**
      * 主键id
      */
-    @TableId(value = "order_id",type = IdType.AUTO)
+    @TableId(value = "order_id")
     private String orderId;
     /**
      * 下订单会员id

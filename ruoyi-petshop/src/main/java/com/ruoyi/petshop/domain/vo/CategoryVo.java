@@ -104,4 +104,9 @@ public class CategoryVo {
     private Date updateTime;
 
     private CategoryOssVo categoryOssVo;
+
+    private Long parentId;
+    private Long getParentId(){
+        return getCatPid();
+    }
 }

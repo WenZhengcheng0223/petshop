@@ -12,11 +12,10 @@ import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.MessageUtils;
 import com.ruoyi.common.utils.ServletUtils;
-import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.config.WxMaConfiguration;
-import com.ruoyi.petshop.domain.WxLoginUser;
+import com.ruoyi.common.core.domain.model.WxLoginUser;
 import com.ruoyi.petshop.domain.WxUser;
-import com.ruoyi.petshop.domain.vo.WxUserVo;
+import com.ruoyi.petshop.domain.bo.WxUserBo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -74,10 +73,10 @@ public class WxLoginService {
     /**
      * 小程序退出登陆
      *
-     * @param openId 小程序用户openid
+     * @param userId 小程序用户openid
      */
-    void miniAppLoginOut(String openId) {
-
+    public void miniAppLoginOut(String userId) {
+        asyncService.recordLogininfor(userId,Constants.LOGOUT,MessageUtils.message("wx.user.logout.success"),ServletUtils.getRequest());
     }
 
 
@@ -104,6 +103,10 @@ public class WxLoginService {
         if (ObjectUtil.isNull(wxUser)) {
             log.info("登录用户：{} 不存在.", openid);
             // todo 用户不存在 业务逻辑自行实现
+            WxUserBo wxUserBo = new WxUserBo();
+            wxUserBo.setOpenid(openid);
+            return wxUserService.insertByOpenId(wxUserBo);
+
         } else if (UserStatus.DISABLE.getCode().equals(String.valueOf(wxUser.getStatus()))) {
             log.info("登录用户：{} 已被停用.", openid);
             // todo 用户已被停用 业务逻辑自行实现

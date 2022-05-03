@@ -1,4 +1,4 @@
-package com.ruoyi.petshop.domain;
+package com.ruoyi.common.core.domain.model;
 
 import com.ruoyi.common.core.domain.dto.RoleDTO;
 import com.ruoyi.common.core.domain.model.LoginUser;

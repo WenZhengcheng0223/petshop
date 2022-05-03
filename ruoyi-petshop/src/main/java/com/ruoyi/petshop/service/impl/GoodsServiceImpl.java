@@ -84,6 +84,10 @@ public class GoodsServiceImpl implements IGoodsService {
         lqw.like(StringUtils.isNotBlank(bo.getGoodsName()), Goods::getGoodsName, bo.getGoodsName());
         lqw.eq(StringUtils.isNotBlank(bo.getIsDel()), Goods::getIsDel, bo.getIsDel());
         lqw.eq(bo.getIsPromote() != null, Goods::getIsPromote, bo.getIsPromote());
+        lqw.eq(bo.getGoodsPrice() != null, Goods::getGoodsPrice, bo.getGoodsPrice());
+        lqw.eq(bo.getCatOneId() != null, Goods::getCatOneId, bo.getCatOneId());
+        lqw.eq(bo.getCatTwoId() != null, Goods::getCatTwoId, bo.getCatTwoId());
+        lqw.eq(bo.getCatThreeId() != null, Goods::getCatThreeId, bo.getCatThreeId());
         lqw.eq(bo.getGoodsState() != null, Goods::getGoodsState, bo.getGoodsState());
         return lqw;
     }

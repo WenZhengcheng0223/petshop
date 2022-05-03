@@ -79,6 +79,11 @@ public class WxUserBo extends BaseEntity {
     @ApiModelProperty(value = "最后登录时间", required = true)
     @NotNull(message = "最后登录时间不能为空", groups = { AddGroup.class, EditGroup.class })
     private Date loginDate;
-
+    /**
+     * 微信唯一编号信息
+     */
+    @ApiModelProperty(value = "微信唯一编号信息", required = true)
+    @NotNull(message = "微信唯一编号信息不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String openid;
 
 }

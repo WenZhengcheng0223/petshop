@@ -78,7 +78,7 @@ public class GoodsBo extends BaseEntity {
     /**
      * 商品情况
      */
-    @ApiModelProperty(value = "商品情况", required = true)
+    @ApiModelProperty(value = "商品情况 0:正常  1:删除", required = true)
     @NotBlank(message = "商品情况不能为空", groups = {AddGroup.class, EditGroup.class})
     private String isDel;
 
@@ -113,18 +113,18 @@ public class GoodsBo extends BaseEntity {
     /**
      * 是否促销
      */
-    @ApiModelProperty(value = "是否促销", required = true)
-    @NotNull(message = "是否促销不能为空", groups = {AddGroup.class, EditGroup.class})
+    @ApiModelProperty(value = "促销状态 0正常 1促销", required = true)
+    @NotNull(message = "促销状态不能为空", groups = {AddGroup.class, EditGroup.class})
     private Long isPromote;
 
     /**
      * 商品状态
      */
-    @ApiModelProperty(value = "商品状态", required = true)
+    @ApiModelProperty(value = "商品状态 0: 已上架 1: 已下架", required = true)
     @NotNull(message = "商品状态不能为空", groups = {AddGroup.class, EditGroup.class})
     private Long goodsState;
 
-    @ApiModelProperty(value = "商品状态", required = false)
+    @ApiModelProperty(value = "商品图片list", required = false)
     private List<GoodsOssBo> goodsOss;
 
 

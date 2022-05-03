@@ -112,7 +112,6 @@ public class SysLoginService {
         loginUser.setUserId(user.getUserId());
         loginUser.setUsername(user.getUserName());
         loginUser.setUserType(user.getUserType());
-        loginUser.setOpenid(openid);
         // 生成token
         LoginHelper.loginByDevice(loginUser, DeviceType.XCX);
 
