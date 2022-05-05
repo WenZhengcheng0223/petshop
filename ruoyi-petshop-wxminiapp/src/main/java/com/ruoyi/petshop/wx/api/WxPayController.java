@@ -13,7 +13,6 @@ import com.github.binarywang.wxpay.bean.result.WxPayRefundV3Result;
 import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
-import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.constant.OrderConstants;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.helper.LoginHelper;
@@ -42,6 +41,10 @@ import java.util.Date;
 public class WxPayController {
     private final WxPayService wxService;
     private final IOrderService orderService;
+    /**
+     * 支付方式 微信支付
+     */
+    private static final String WX_PAY ="2";
 
 
     @ApiOperation("统一下单，并组装所需支付参数")
@@ -49,14 +52,13 @@ public class WxPayController {
     public R<Object> pay(@RequestBody WxPayUnifiedOrderV3Request request) {
         String orderNo = new DateTime(new Date()).toString("yyyyMMdd") + IdUtil.getSnowflake(1, 15).nextId();
         WxPayUnifiedOrderV3Request.Payer payer = new WxPayUnifiedOrderV3Request.Payer();
-//        request.setPayer(payer.setOpenid(LoginHelper.getWxLoginUser().getOpenId()));
-        request.setPayer(payer.setOpenid("ohgdm5UAyUmscL7IeYpYKNdGuUeU"));
+        request.setPayer(payer.setOpenid(LoginHelper.getWxLoginUser().getOpenId()));
         request.setOutTradeNo(orderNo);
         OrderBo orderBo = new OrderBo();
         orderBo.setOrderNumber(orderNo);
         orderBo.setOrderPrice(BigDecimal.valueOf(request.getAmount().getTotal()));
         orderBo.setPayStatus(OrderConstants.UN_PAID);
-        orderBo.setOrderPay("2");
+        orderBo.setOrderPay(WX_PAY);
         orderService.insertByBo(orderBo);
         try {
             Object orderV3 = this.wxService.createOrderV3(TradeTypeEnum.JSAPI, request);
