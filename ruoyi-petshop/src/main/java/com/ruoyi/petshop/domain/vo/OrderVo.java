@@ -1,23 +1,22 @@
 package com.ruoyi.petshop.domain.vo;
 
+import java.math.BigDecimal;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.ruoyi.common.annotation.ExcelDictFormat;
 import com.ruoyi.common.convert.ExcelDictConvert;
-import com.ruoyi.petshop.domain.GoodsOss;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import java.math.BigDecimal;
 import java.util.Date;
+
 
 
 /**
  * 订单视图对象 sp_order
  *
  * @author ruoyi
- * @date 2022-04-26
+ * @date 2022-05-07
  */
 @Data
 @ApiModel("订单视图对象")
@@ -34,6 +33,13 @@ public class OrderVo {
     private String orderId;
 
     /**
+     * 商品ID
+     */
+    @ExcelProperty(value = "商品ID")
+    @ApiModelProperty("商品ID")
+    private Long goodsId;
+
+    /**
      * 下订单会员id
      */
     @ExcelProperty(value = "下订单会员id")
@@ -48,6 +54,34 @@ public class OrderVo {
     private String orderNumber;
 
     /**
+     * 商品名称
+     */
+    @ExcelProperty(value = "商品名称")
+    @ApiModelProperty("商品名称")
+    private String goodsName;
+
+    /**
+     * 商品描述
+     */
+    @ExcelProperty(value = "商品描述")
+    @ApiModelProperty("商品描述")
+    private String description;
+
+    /**
+     * 商品价格
+     */
+    @ExcelProperty(value = "商品价格")
+    @ApiModelProperty("商品价格")
+    private BigDecimal goodsPrice;
+
+    /**
+     * 商品数量
+     */
+    @ExcelProperty(value = "商品数量")
+    @ApiModelProperty("商品数量")
+    private Long quantity;
+
+    /**
      * 订单总金额
      */
     @ExcelProperty(value = "订单总金额")
@@ -55,34 +89,31 @@ public class OrderVo {
     private BigDecimal orderPrice;
 
     /**
-     * 支付方式
+     * 支付方式  0未支付 1支付宝  2微信  3银行卡
      */
-    @ExcelProperty(value = "支付方式", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(dictType = "order_status")
-    @ApiModelProperty("支付方式")
+    @ExcelProperty(value = "支付方式  0未支付 1支付宝  2微信  3银行卡")
+    @ApiModelProperty("支付方式  0未支付 1支付宝  2微信  3银行卡")
     private String orderPay;
 
     /**
-     * 发货状态
+     * 订单是否已经发货
      */
-    @ExcelProperty(value = "发货状态", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(dictType = "order_out_status")
-    @ApiModelProperty("发货状态")
+    @ExcelProperty(value = "订单是否已经发货")
+    @ApiModelProperty("订单是否已经发货")
     private String isSend;
 
     /**
-     * 交易流水号码
+     * 支付宝交易流水号码
      */
-    @ExcelProperty(value = "交易流水号码")
-    @ApiModelProperty("交易流水号码")
+    @ExcelProperty(value = "支付宝交易流水号码")
+    @ApiModelProperty("支付宝交易流水号码")
     private String tradeNo;
 
     /**
-     * 发票抬头
+     * 发票抬头 个人 公司
      */
-    @ExcelProperty(value = "发票抬头", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(dictType = "order_fapiao_title")
-    @ApiModelProperty("发票抬头")
+    @ExcelProperty(value = "发票抬头 个人 公司")
+    @ApiModelProperty("发票抬头 个人 公司")
     private String orderFapiaoTitle;
 
     /**
@@ -100,34 +131,18 @@ public class OrderVo {
     private String orderFapiaoContent;
 
     /**
-     * 收货人地址
+     * consignee收货人地址
      */
-    @ExcelProperty(value = "收货人地址")
-    @ApiModelProperty("收货人地址")
+    @ExcelProperty(value = "consignee收货人地址")
+    @ApiModelProperty("consignee收货人地址")
     private String consigneeAddr;
 
     /**
-     * 订单状态
+     * 订单状态： 0未付款、1已付款、2已退款
      */
-    @ExcelProperty(value = "订单状态", converter = ExcelDictConvert.class)
-    @ExcelDictFormat(dictType = "pay_status")
-    @ApiModelProperty("订单状态")
+    @ExcelProperty(value = "订单状态： 0未付款、1已付款、2已退款")
+    @ApiModelProperty("订单状态： 0未付款、1已付款、2已退款")
     private String payStatus;
 
-    /**
-     * 记录生成时间
-     */
-    @ExcelProperty(value = "记录生成时间")
-    @ApiModelProperty("记录生成时间")
-    private Date createTime;
-
-    /**
-     * 记录修改时间
-     */
-    @ExcelProperty(value = "记录修改时间")
-    @ApiModelProperty("记录修改时间")
-    private Date updateTime;
-
-    private GoodsOss goodsOss;
 
 }

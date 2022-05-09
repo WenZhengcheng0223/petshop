@@ -58,13 +58,14 @@ public class WxLoginService {
 
         // 此处可根据登录用户的数据不同 自行创建 loginUser
         WxLoginUser loginUser = new WxLoginUser();
+        loginUser.setUserType("app_user");
         loginUser.setUserId(user.getUserId());
         loginUser.setUsername(user.getNickName());
         loginUser.setOpenId(openid);
         // 生成token
         LoginHelper.loginByDevice(loginUser, DeviceType.XCX);
 
-        asyncService.recordLogininfor(user.getNickName(), Constants.LOGIN_SUCCESS, MessageUtils.message("wx.user.login.success"), request);
+        asyncService.recordLogininfor(user.getNickName(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success"), request);
         recordLoginInfo(user.getUserId(), user.getNickName());
         return StpUtil.getTokenValue();
 
@@ -76,7 +77,7 @@ public class WxLoginService {
      * @param userId 小程序用户openid
      */
     public void miniAppLoginOut(String userId) {
-        asyncService.recordLogininfor(userId,Constants.LOGOUT,MessageUtils.message("wx.user.logout.success"),ServletUtils.getRequest());
+        asyncService.recordLogininfor(userId,Constants.LOGOUT,MessageUtils.message("user.logout.success"),ServletUtils.getRequest());
     }
 
 

@@ -89,6 +89,7 @@ public class GoodsServiceImpl implements IGoodsService {
         lqw.eq(bo.getCatTwoId() != null, Goods::getCatTwoId, bo.getCatTwoId());
         lqw.eq(bo.getCatThreeId() != null, Goods::getCatThreeId, bo.getCatThreeId());
         lqw.eq(bo.getGoodsState() != null, Goods::getGoodsState, bo.getGoodsState());
+        lqw.eq(bo.getCatId() != null, Goods::getCatId, bo.getCatId());
         return lqw;
     }
 

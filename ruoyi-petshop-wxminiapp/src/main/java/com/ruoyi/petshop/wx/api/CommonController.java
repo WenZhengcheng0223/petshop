@@ -56,7 +56,9 @@ public class CommonController {
             tree.setId(list.getCatId())
                     .setParentId(list.getCatPid())
                     .setName(list.getCatName())
-                    .setWeight(list.getCatLevel()).putExtra("catLevel", list.getCatLevel());
+                    .setWeight(list.getCatLevel())
+                    .putExtra("catLevel", list.getCatLevel());
+            tree.putExtra("catIcon",list.getCatIcon());
         });
         return R.ok(treeList);
     }

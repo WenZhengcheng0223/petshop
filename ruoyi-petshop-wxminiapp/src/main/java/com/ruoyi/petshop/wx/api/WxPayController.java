@@ -52,13 +52,20 @@ public class WxPayController {
     public R<Object> pay(@RequestBody WxPayUnifiedOrderV3Request request) {
         String orderNo = new DateTime(new Date()).toString("yyyyMMdd") + IdUtil.getSnowflake(1, 15).nextId();
         WxPayUnifiedOrderV3Request.Payer payer = new WxPayUnifiedOrderV3Request.Payer();
+        Double price = Double.valueOf(request.getAmount().getTotal());
+
         request.setPayer(payer.setOpenid(LoginHelper.getWxLoginUser().getOpenId()));
         request.setOutTradeNo(orderNo);
         OrderBo orderBo = new OrderBo();
         orderBo.setOrderNumber(orderNo);
-        orderBo.setOrderPrice(BigDecimal.valueOf(request.getAmount().getTotal()));
+        orderBo.setUserId(String.valueOf(LoginHelper.getLoginUser().getUserId()));
+        orderBo.setGoodsId(Long.valueOf(request.getDetail().getGoodsDetails().get(0).getMerchantGoodsId()));
+        orderBo.setGoodsName(request.getDescription());
+        orderBo.setQuantity(request.getDetail().getGoodsDetails().get(0).getUnitPrice().longValue());
+        orderBo.setOrderPrice(BigDecimal.valueOf(price/100));
         orderBo.setPayStatus(OrderConstants.UN_PAID);
         orderBo.setOrderPay(WX_PAY);
+        System.out.println(LoginHelper.getLoginUser().getUserId());
         orderService.insertByBo(orderBo);
         try {
             Object orderV3 = this.wxService.createOrderV3(TradeTypeEnum.JSAPI, request);

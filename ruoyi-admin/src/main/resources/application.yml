@@ -144,7 +144,7 @@ security:
     # 微信小程序登录退出
     - /api/wx/login
     # 微信小程序通用请求 不需要验证
-    - /api/wx/common/*
+    - /api/wx/common/**
     # 微信小程序支付回调 不需要验证
     - /api/wx/pay/notify/**
 

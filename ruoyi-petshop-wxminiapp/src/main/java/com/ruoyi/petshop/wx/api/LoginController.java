@@ -4,6 +4,8 @@ import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.helper.LoginHelper;
+import com.ruoyi.petshop.domain.WxUser;
+import com.ruoyi.petshop.service.IWxUserService;
 import com.ruoyi.petshop.service.WxLoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,10 +15,8 @@ import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.security.auth.login.LoginException;
 import javax.validation.constraints.NotBlank;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,6 +34,8 @@ import java.util.Map;
 public class LoginController {
 
     private final WxLoginService loginService;
+    private final IWxUserService wxUserService;
+
 
     @ApiOperation("登录")
     @PostMapping("login")
@@ -56,14 +58,23 @@ public class LoginController {
 
     @ApiOperation("退出")
     @GetMapping("/logout")
-    public R<Object> logout(){
+    public R<Object> logout() {
 
         try {
             StpUtil.logout();
             loginService.miniAppLoginOut(LoginHelper.getLoginUser().getLoginId());
-        }catch (NotLoginException e){
+        } catch (NotLoginException e) {
             return R.fail(e.getMessage());
         }
+        return R.ok();
+    }
+
+
+    @ApiOperation("用户信息")
+    @PostMapping("/user")
+    public R<Object> user(WxUser wxUser) {
+        wxUser.setOpenid(LoginHelper.getWxLoginUser().getOpenId());
+        wxUserService.updateByBo(wxUser);
         return R.ok();
     }
 
