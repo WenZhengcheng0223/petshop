@@ -59,13 +59,8 @@ public class LoginController {
     @ApiOperation("退出")
     @GetMapping("/logout")
     public R<Object> logout() {
-
-        try {
-            StpUtil.logout();
-            loginService.miniAppLoginOut(LoginHelper.getLoginUser().getLoginId());
-        } catch (NotLoginException e) {
-            return R.fail(e.getMessage());
-        }
+        StpUtil.logout();
+        loginService.miniAppLoginOut(LoginHelper.getLoginUser().getLoginId());
         return R.ok();
     }
 

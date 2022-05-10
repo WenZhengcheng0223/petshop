@@ -120,7 +120,6 @@ public class WxUserServiceImpl implements IWxUserService {
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             return add;
-
         }
         return null;
     }
