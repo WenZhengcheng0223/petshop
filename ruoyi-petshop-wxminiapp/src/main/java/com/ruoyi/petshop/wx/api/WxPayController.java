@@ -25,7 +25,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ProjectName: RuoYi-Vue-Plus
@@ -46,27 +48,35 @@ public class WxPayController {
      */
     private static final String WX_PAY ="2";
 
+    /**
+     * 分转元 倍数差
+     */
+    private static final BigDecimal DIVIDE = new BigDecimal("100");
 
     @ApiOperation("统一下单，并组装所需支付参数")
     @PostMapping("/createOrder")
     public R<Object> pay(@RequestBody WxPayUnifiedOrderV3Request request) {
         String orderNo = new DateTime(new Date()).toString("yyyyMMdd") + IdUtil.getSnowflake(1, 15).nextId();
         WxPayUnifiedOrderV3Request.Payer payer = new WxPayUnifiedOrderV3Request.Payer();
-        Double price = Double.valueOf(request.getAmount().getTotal());
-
+        BigDecimal total = new BigDecimal(request.getAmount().getTotal());
         request.setPayer(payer.setOpenid(LoginHelper.getWxLoginUser().getOpenId()));
         request.setOutTradeNo(orderNo);
-        OrderBo orderBo = new OrderBo();
-        orderBo.setOrderNumber(orderNo);
-        orderBo.setUserId(String.valueOf(LoginHelper.getLoginUser().getUserId()));
-        orderBo.setGoodsId(Long.valueOf(request.getDetail().getGoodsDetails().get(0).getMerchantGoodsId()));
-        orderBo.setGoodsName(request.getDescription());
-        orderBo.setQuantity(request.getDetail().getGoodsDetails().get(0).getUnitPrice().longValue());
-        orderBo.setOrderPrice(BigDecimal.valueOf(price/100));
-        orderBo.setPayStatus(OrderConstants.UN_PAID);
-        orderBo.setOrderPay(WX_PAY);
-        System.out.println(LoginHelper.getLoginUser().getUserId());
-        orderService.insertByBo(orderBo);
+        List<WxPayUnifiedOrderV3Request.GoodsDetail> list = request.getDetail().getGoodsDetails();
+        list.forEach(item -> {
+            BigDecimal goodsPrice = new BigDecimal(item.getUnitPrice());
+            OrderBo orderBo = new OrderBo();
+            orderBo.setOrderNumber(orderNo);
+            orderBo.setOrderPrice(total.divide(DIVIDE, RoundingMode.CEILING));
+            orderBo.setUserId(String.valueOf(LoginHelper.getLoginUser().getUserId()));
+            orderBo.setGoodsId(Long.valueOf(item.getMerchantGoodsId()));
+            orderBo.setGoodsName(request.getDescription());
+            orderBo.setQuantity(item.getQuantity().longValue());
+            orderBo.setGoodsPrice(goodsPrice.divide(DIVIDE, RoundingMode.CEILING));
+            orderBo.setPayStatus(OrderConstants.UN_PAID);
+            orderBo.setOrderPay(WX_PAY);
+            orderService.insertByBo(orderBo);
+        });
+
         try {
             Object orderV3 = this.wxService.createOrderV3(TradeTypeEnum.JSAPI, request);
             return R.ok(orderV3);
