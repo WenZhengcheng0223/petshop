@@ -1,6 +1,7 @@
 package com.ruoyi.petshop.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.common.core.domain.PageQuery;
@@ -39,8 +40,9 @@ public class GoodsServiceImpl implements IGoodsService {
      */
     @Override
     public GoodsVo queryById(String goodsId) {
-        GoodsVo goodsVo = baseMapper.selectVoById(goodsId);
-        return goodsVo;
+        LambdaQueryWrapper<Goods> lqw = Wrappers.lambdaQuery();
+        lqw.eq(Goods::getGoodsId,goodsId);
+        return baseMapper.selectVoByIdAndOss(lqw);
     }
 
     /**

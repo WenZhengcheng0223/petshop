@@ -43,6 +43,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         on sd.goods_id = so.goods_id
         order by sd.goods_id
     </select>
-
-
+    <select id="selectVoByIdAndOss" resultMap="GoodsResult">
+        select sd.*, so.*
+        from sp_goods as sd
+        left join sp_goods_oss as so
+        on sd.goods_id = so.goods_id
+        ${ew.customSqlSegment}
+    </select>
 </mapper>

@@ -20,4 +20,7 @@ public interface GoodsMapper extends BaseMapperPlus<GoodsMapper, Goods, GoodsVo>
             @Param("ew") Wrapper<Goods> wrapper,
             @Param("start") Integer start,
             @Param("size") Integer size);
+
+    GoodsVo selectVoByIdAndOss( @Param("ew") Wrapper<Goods> wrapper);
+
 }
