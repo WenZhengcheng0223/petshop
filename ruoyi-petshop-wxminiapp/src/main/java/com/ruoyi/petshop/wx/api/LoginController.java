@@ -5,6 +5,8 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.petshop.domain.WxUser;
+import com.ruoyi.petshop.domain.bo.OrderBo;
+import com.ruoyi.petshop.service.IOrderService;
 import com.ruoyi.petshop.service.IWxUserService;
 import com.ruoyi.petshop.service.WxLoginService;
 import io.swagger.annotations.Api;
@@ -35,7 +37,7 @@ public class LoginController {
 
     private final WxLoginService loginService;
     private final IWxUserService wxUserService;
-
+    private final IOrderService orderService;
 
     @ApiOperation("登录")
     @PostMapping("login")
@@ -73,5 +75,12 @@ public class LoginController {
         return R.ok();
     }
 
+    @ApiOperation("用户订单")
+    @PostMapping("/order")
+    public R<Object> order(@RequestBody OrderBo bo) {
+        bo.setUserId(String.valueOf(LoginHelper.getUserId()));
+
+        return R.ok(orderService.queryList(bo));
+    }
 
 }

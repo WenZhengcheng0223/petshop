@@ -7,11 +7,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import javax.validation.constraints.*;
 
-import java.util.Date;
-
-import com.ruoyi.common.core.domain.TreeEntity;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 分类业务对象 sp_category
@@ -29,28 +27,28 @@ public class CategoryBo extends BaseTreeEntity<CategoryBo> {
      * 分类ID
      */
     @ApiModelProperty(value = "分类ID", required = true)
-    @NotNull(message = "分类ID不能为空", groups = { EditGroup.class })
+    @NotNull(message = "分类ID不能为空", groups = {EditGroup.class})
     private Long catId;
 
     /**
      * 分类名称
      */
     @ApiModelProperty(value = "分类名称", required = true)
-    @NotBlank(message = "分类名称不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotBlank(message = "分类名称不能为空", groups = {AddGroup.class, EditGroup.class})
     private String catName;
 
     /**
      * 分类父ID
      */
     @ApiModelProperty(value = "分类父ID", required = true)
-    @NotNull(message = "分类父ID不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotNull(message = "分类父ID不能为空", groups = {AddGroup.class, EditGroup.class})
     private Long catPid;
 
     /**
      * 分类层级
      */
     @ApiModelProperty(value = "分类层级", required = true)
-    @NotNull(message = "分类层级不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotNull(message = "分类层级不能为空", groups = {AddGroup.class, EditGroup.class})
     private Long catLevel;
 
     /**

@@ -1,26 +1,26 @@
 package com.ruoyi.petshop.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.ruoyi.common.exception.ServiceException;
-import com.ruoyi.common.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.oss.entity.UploadResult;
 import com.ruoyi.oss.factory.OssFactory;
 import com.ruoyi.oss.service.IOssStrategy;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.ruoyi.petshop.domain.Category;
 import com.ruoyi.petshop.domain.bo.CategoryBo;
 import com.ruoyi.petshop.domain.vo.CategoryVo;
-import com.ruoyi.petshop.domain.Category;
 import com.ruoyi.petshop.mapper.CategoryMapper;
 import com.ruoyi.petshop.service.ICategoryService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
 /**
  * 分类Service业务层处理
@@ -41,7 +41,7 @@ public class CategoryServiceImpl implements ICategoryService {
      * @return 分类
      */
     @Override
-    public CategoryVo queryById(Long catId){
+    public CategoryVo queryById(Long catId) {
 
         return baseMapper.selectVoById(catId);
     }
@@ -103,7 +103,7 @@ public class CategoryServiceImpl implements ICategoryService {
      *
      * @param entity 实体类数据
      */
-    private void validEntityBeforeSave(Category entity){
+    private void validEntityBeforeSave(Category entity) {
         //TODO 做一些数据校验,如唯一约束
     }
 
@@ -115,7 +115,7 @@ public class CategoryServiceImpl implements ICategoryService {
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if(isValid){
+        if (isValid) {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;
@@ -142,7 +142,7 @@ public class CategoryServiceImpl implements ICategoryService {
         category.setCatId(catId);
         category.setCatIcon("");
         int i = baseMapper.updateById(category);
-        if (i < 1){
+        if (i < 1) {
             return i;
         }
         IOssStrategy strategy = OssFactory.instance();

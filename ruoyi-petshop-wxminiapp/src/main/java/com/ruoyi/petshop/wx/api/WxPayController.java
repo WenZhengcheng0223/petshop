@@ -1,7 +1,5 @@
 package com.ruoyi.petshop.wx.api;
 
-import cn.hutool.core.date.DateTime;
-import cn.hutool.core.util.IdUtil;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyV3Result;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundV3Request;
@@ -16,6 +14,9 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import com.ruoyi.common.constant.OrderConstants;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.helper.LoginHelper;
+import com.ruoyi.common.utils.OrderUtil;
+import com.ruoyi.petshop.domain.PayOrder;
+import com.ruoyi.petshop.domain.bo.GoodsBo;
 import com.ruoyi.petshop.domain.bo.OrderBo;
 import com.ruoyi.petshop.service.IOrderService;
 import io.swagger.annotations.Api;
@@ -25,8 +26,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,39 +48,50 @@ public class WxPayController {
     private static final String WX_PAY ="2";
 
     /**
-     * 分转元 倍数差
+     * 元转分 倍数差
      */
-    private static final BigDecimal DIVIDE = new BigDecimal("100");
+    private static final BigDecimal MULTIPLY = new BigDecimal("100");
 
     @ApiOperation("统一下单，并组装所需支付参数")
     @PostMapping("/createOrder")
-    public R<Object> pay(@RequestBody WxPayUnifiedOrderV3Request request) {
-        String orderNo = new DateTime(new Date()).toString("yyyyMMdd") + IdUtil.getSnowflake(1, 15).nextId();
+    public R<Object> pay(@RequestBody PayOrder order) {
+        String orderNo = OrderUtil.createOrderNumber();
+        WxPayUnifiedOrderV3Request request = new WxPayUnifiedOrderV3Request();
+        WxPayUnifiedOrderV3Request.Amount amount = new WxPayUnifiedOrderV3Request.Amount();
         WxPayUnifiedOrderV3Request.Payer payer = new WxPayUnifiedOrderV3Request.Payer();
-        BigDecimal total = new BigDecimal(request.getAmount().getTotal());
-        request.setPayer(payer.setOpenid(LoginHelper.getWxLoginUser().getOpenId()));
+        BigDecimal totalAmount = order.getTotalAmount();
+
+        payer.setOpenid(LoginHelper.getWxLoginUser().getOpenId());
+        amount.setTotal(totalAmount.multiply(MULTIPLY).intValue());
+
         request.setOutTradeNo(orderNo);
-        List<WxPayUnifiedOrderV3Request.GoodsDetail> list = request.getDetail().getGoodsDetails();
-        list.forEach(item -> {
-            BigDecimal goodsPrice = new BigDecimal(item.getUnitPrice());
-            OrderBo orderBo = new OrderBo();
-            orderBo.setOrderNumber(orderNo);
-            orderBo.setOrderPrice(total.divide(DIVIDE, RoundingMode.CEILING));
-            orderBo.setUserId(String.valueOf(LoginHelper.getLoginUser().getUserId()));
-            orderBo.setGoodsId(Long.valueOf(item.getMerchantGoodsId()));
-            orderBo.setGoodsName(request.getDescription());
-            orderBo.setQuantity(item.getQuantity().longValue());
-            orderBo.setGoodsPrice(goodsPrice.divide(DIVIDE, RoundingMode.CEILING));
-            orderBo.setPayStatus(OrderConstants.UN_PAID);
-            orderBo.setOrderPay(WX_PAY);
-            orderService.insertByBo(orderBo);
+        request.setAmount(amount);
+        request.setPayer(payer);
+        request.setDescription(order.getDescription());
+
+        List<GoodsBo> list = order.getGoods();
+        list.forEach(item->{
+            OrderBo bo = new OrderBo();
+            bo.setOrderNumber(orderNo);
+            bo.setUserId(String.valueOf(LoginHelper.getUserId()));
+            bo.setDescription(order.getDescription());
+            bo.setGoodsId(Long.valueOf(item.getGoodsId()));
+            bo.setGoodsName(item.getGoodsName());
+            bo.setGoodsPrice(item.getGoodsPrice());
+            bo.setQuantity(Long.valueOf(item.getGoodsNumber()));
+            bo.setConsigneeAddr(order.getAddress());
+            bo.setIsSend("否");
+            bo.setOrderPay("2");
+            bo.setOrderPrice(order.getTotalAmount());
+            bo.setPayStatus(OrderConstants.UN_PAID);
+            orderService.insertByBo(bo);
         });
 
         try {
             Object orderV3 = this.wxService.createOrderV3(TradeTypeEnum.JSAPI, request);
             return R.ok(orderV3);
         } catch (WxPayException e) {
-            return R.fail(e.getReturnMsg());
+            return R.fail(e.getMessage());
         }
     }
 

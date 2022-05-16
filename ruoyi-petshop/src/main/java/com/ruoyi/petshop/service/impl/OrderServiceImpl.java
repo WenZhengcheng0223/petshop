@@ -86,7 +86,9 @@ public class OrderServiceImpl implements IOrderService {
     private LambdaQueryWrapper<Order> buildQueryWrapper(OrderBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<Order> lqw = Wrappers.lambdaQuery();
+
         lqw.eq(StringUtils.isNotBlank(bo.getOrderNumber()), Order::getOrderNumber, bo.getOrderNumber());
+        lqw.eq(StringUtils.isNotBlank(bo.getUserId()), Order::getUserId, bo.getUserId());
         lqw.eq(StringUtils.isNotBlank(bo.getOrderPay()), Order::getOrderPay, bo.getOrderPay());
         lqw.eq(StringUtils.isNotBlank(bo.getIsSend()), Order::getIsSend, bo.getIsSend());
         lqw.eq(StringUtils.isNotBlank(bo.getOrderFapiaoTitle()), Order::getOrderFapiaoTitle, bo.getOrderFapiaoTitle());

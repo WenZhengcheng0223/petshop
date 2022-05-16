@@ -3,6 +3,8 @@ package com.ruoyi.petshop.domain.vo;
 import java.math.BigDecimal;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.ruoyi.common.annotation.ExcelDictFormat;
 import com.ruoyi.common.convert.ExcelDictConvert;
 import io.swagger.annotations.ApiModel;
@@ -145,4 +147,18 @@ public class OrderVo {
     private String payStatus;
 
 
+    /**
+     * 创建时间
+     */
+    @ExcelProperty(value = "创建时间")
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime;
+
+
+    /**
+     * 更新时间
+     */
+    @ExcelProperty(value = "更新时间")
+    @ApiModelProperty(value = "更新时间")
+    private Date updateTime;
 }
